@@ -48,12 +48,12 @@ cfg$gms$c_timesteps <- "coup2100"    # is default
 cfg$input <- c(regional    = "rev4.89h12_David_EU_h12_magpie.tgz",
                cellular    = "rev4.89h12_David_EU_h12_fd712c0b_cellularmagpie_c200_MRI-ESM2-0-ssp370_lpjml-8e6c5eb1.tgz",
                validation  = "rev4.89h12_400_David_EU_h12_validation.tgz",
-               additional  = "additional_data_rev4.45.tgz")
+               additional  = "additional_data_rev4.45.tgz")    # input data preprocessed for intended run
 
 cfg$title  <- "h12"
-cfg        <- setScenario(cfg,c("SSP2","NDC", "ForestryEndo"))
-cfg$gms$s13_ignore_tau_historical <- 1
-cfg$gms$factor_costs <- "sticky_feb18"  
+cfg        <- setScenario(cfg,c("SSP2","NDC", "ForestryEndo")) # scenario defintion
+cfg$gms$s13_ignore_tau_historical <- 1                         # def = 1
+cfg$gms$factor_costs <- "sticky_feb18"                         # factor costs including investments in capital, def = per_ton_fao_may22
 # start_run(cfg,codeCheck=FALSE)
 # magpie4::submitCalibration(name = "h12")
 
