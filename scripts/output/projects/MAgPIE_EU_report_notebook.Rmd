@@ -1,0 +1,141 @@
+---
+title: "Compare MAgPIE EU with LUH Data"
+output:
+  html_document:
+    df_print: paged
+    code_folding: hide
+---
+
+# Setup and read data
+```{r, setup, include=FALSE}
+knitr::opts_knit$set(root.dir = dirname(dirname(dirname(getwd()))) )
+```
+
+```{r echo = T, results = 'hide', message=FALSE, warning=FALSE}
+# setup working dir and packages, read outputdir
+#readArgs("outputdir")
+outputdir<- paste0(getwd(), "/output/v4p81/h12_2023-09-15_18.35.25/")
+library(madrat)
+library(mrcommons)
+library(magpie4)
+```
+
+```{r}
+print(paste0("Script started for output directory: ",outputdir))
+```
+
+```{r echo = T, results = 'hide', message=FALSE, warning=FALSE}
+# Read modul output and LUH2v2 data, process and bind them.
+
+#### load and process reference data to match with model data
+LUH2v2 <- calcOutput("LanduseInitialisation", aggregate=FALSE, cellular = TRUE, nclasses="seven")
+LUH2v2<- LUH2v2[,seq(1995,2010,5),]
+getNames(LUH2v2) <- paste0(getNames(LUH2v2),".ref")
+
+#### load and process model data to match with reference data
+path2landoutput<- paste0(outputdir, "cell.land_0.5.mz")
+h12Land<- read.magpie(path2landoutput)
+h12Land<- h12Land[,seq(1995,2010,5),]
+getNames(h12Land)<- paste0(getNames(h12Land),".mod")
+
+##### bind model and refernece data
+val<- mbind(h12Land, LUH2v2) 
+
+##### Make a dataframe out of it.
+library(dplyr)
+library(tidyr)
+
+as.data.frame(val) ->val_df
+val_df %>% pivot_wider(names_from = "Data2", values_from = "Value") -> val_df
+
+
+```
+
+
+# Plot data
+
+
+```{r echo = T, results = 'hide'}
+# Create a plotting function.
+# function to create scatter plot with quality metrics that is faceted by years
+
+library(ggplot2)
+library(plotly)
+
+plot_data <- function(val_df, val, type, plotlyEn=FALSE) {
+  
+  df_subset <- val_df[val_df$Data1 == type, ] # extract requested type from data
+
+  # Create quality measure dataframe
+  qualityMeas <- NULL # list of dataframes, one for each year
+  for (y in seq(1995, 2010, 5)) {
+    meas <- luplot::qualityMeasure(val[,y,paste0(type, ".mod")], val[,y,paste0(type, ".ref")], 
+                                   measures = c("Willmott", "Willmott refined", "Nash Sutcliffe", "RMSE", "MAE"))
+    
+    # Create text for the year facet 
+    text=""
+    for(i in 1:length(meas)){
+      text<- paste0(text, names(meas)[i], " : ", meas[i], "\n")
+    }
+
+    # Create df for that year
+    qualityMeas[[y]] <- data.frame(
+      Year = y,
+      texted = text
+    )
+  }
+  qualityMeasBinded<- dplyr::bind_rows(qualityMeas) # bind all year dataframes
+
+  # Create the plot with facets
+  p <- ggplot(df_subset, mapping = aes(x=mod, y=ref, reg= Region)) + 
+       geom_point() + 
+       geom_abline(color="#0ab93f", size=2) + 
+       facet_wrap(~ Year, scales = "free", ncol = 2)  # Create facets based on 'Year'
+
+  # Add quality measure text
+  p <- p+ geom_text(x= 0, y=Inf , aes(label = texted), color="#0ab93f", 
+    hjust =0, vjust= 1, nudge_x = 10 ,size = 3,
+    data = qualityMeasBinded, inherit.aes = F)
+  if(plotlyEn){
+    p <- plotly::ggplotly(p)
+  }
+  return(p)
+}
+
+```
+
+
+## crop
+```{r}
+plot_data(val_df, val, "crop", plotlyEn = F)
+```
+
+## pasture
+```{r}
+plot_data(val_df, val, "past", plotlyEn = F)
+```
+
+## forestry
+```{r}
+plot_data(val_df, val, "forestry")
+```
+
+## primforest
+```{r}
+plot_data(val_df, val, "primforest")
+```
+
+## secdforest
+```{r}
+plot_data(val_df, val, "secdforest")
+```
+
+## urban
+```{r}
+plot_data(val_df, val, "urban")
+```
+
+## other
+```{r}
+plot_data(val_df, val, "other")
+```
