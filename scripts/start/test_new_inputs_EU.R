@@ -80,8 +80,8 @@ cfg$title  <- "h16"
 cfg        <- setScenario(cfg,c("SSP2","NDC", "ForestryEndo"))
 cfg$gms$s13_ignore_tau_historical <- 1
 cfg$gms$factor_costs <- "sticky_feb18"  
-start_run(cfg,codeCheck=FALSE)
-magpie4::submitCalibration(name = "h16")
+#start_run(cfg,codeCheck=FALSE)
+#magpie4::submitCalibration(name = "h16")
 
 # ---- H16S5
 cfg$input <- c(regional    = "rev4.89h16s5_David_EU_1028489d_magpie.tgz",
@@ -93,8 +93,8 @@ cfg$title  <- "h16s5"
 cfg        <- setScenario(cfg,c("SSP2","NDC", "ForestryEndo"))
 cfg$gms$s13_ignore_tau_historical <- 1
 cfg$gms$factor_costs <- "sticky_feb18"  
-start_run(cfg,codeCheck=FALSE)
-magpie4::submitCalibration(name = "h16s5")
+#start_run(cfg,codeCheck=FALSE)
+#magpie4::submitCalibration(name = "h16s5")
 
 
 
