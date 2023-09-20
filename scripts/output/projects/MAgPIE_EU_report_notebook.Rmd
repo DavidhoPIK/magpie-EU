@@ -14,7 +14,7 @@ knitr::opts_knit$set(root.dir = dirname(dirname(dirname(getwd()))) )
 ```{r echo = T, results = 'hide', message=FALSE, warning=FALSE}
 # setup working dir and packages, read outputdir
 readArgs("outputdir")
-#outputdir<- paste0(getwd(), "/output/v4p81/h12_2023-09-15_18.35.25/")
+#outputdir<- paste0(getwd(), "/output/v4p81/h16_2023-09-17_22.25.40/")
 library(madrat)
 library(mrcommons)
 library(magpie4)
@@ -112,12 +112,12 @@ plotScatter <- function(valDF, val, type) {
   # Create the plot with facets
   p <- ggplot(dfSubset, mapping = aes(x=mod, y=ref, reg= Region, cell= Cell, relativeErr = (mod-ref)/ref)) +
     geom_point(size=0.5) +
-    geom_abline(color="#307e57", size=1.7) + 
+    geom_abline(color="#10ff88", size=1.7) + 
     facet_wrap(~ Year, scales = "free", ncol = 4) + # Create facets based on 'Year'
     labs(x="MAgPIE output", y="LUH2v2")
 
   # Add quality measure text
-  p <- p+ geom_text(x= 0, y=Inf , aes(label = texted), color="#307e57", 
+  p <- p+ geom_text(x= 0, y=Inf , aes(label = texted), color="#10ff88", 
     hjust =0, vjust= 1, nudge_x = 10 ,size = 2,
     data = qualityMeasBinded, inherit.aes = F)
 
@@ -143,7 +143,7 @@ plotMaps <- function(valDF, type) {
 
 # create and interactive scatterplot for eu countries of a year
 plotInteractiveSub <- function(val, type, year) {
-  eu_cells <- as.numeric(str_extract_all(spatial_header[grepl("EUR",spatial_header)],"[0-9]+"))
+  eu_cells <- as.numeric(str_extract_all(spatial_header[grepl("EU",spatial_header)],"[0-9]+"))
   val <- val[eu_cells,year,]
   valDF <- as.data.frame(val)
   valDF %>% pivot_wider(names_from = "Data2", values_from = "Value") -> valDF
@@ -160,7 +160,7 @@ plotInteractiveSub <- function(val, type, year) {
 ```{r,message=FALSE, warning=FALSE, out.width="100%"}
 plotCombined(valDF, val, "crop")
 ```
-```{r, message=FALSE, warning=FALSE,  out.width="40%", fig.align="center"}
+```{r, message=FALSE, warning=FALSE,   fig.align="center"}
 plotInteractiveSub(val, "crop", 2010)
 ```
 
@@ -169,7 +169,7 @@ plotInteractiveSub(val, "crop", 2010)
 plotCombined(valDF, val, "past")
 ```
 
-```{r, message=FALSE, warning=FALSE,  out.width="40%", fig.align="center"}
+```{r, message=FALSE, warning=FALSE,   fig.align="center"}
 plotInteractiveSub( val, "past", 2010)
 ```
 ## forestry
@@ -182,7 +182,7 @@ plotCombined(valDF, val, "forestry")
 plotCombined(valDF, val, "primforest")
 ```
 
-```{r, message=FALSE, warning=FALSE,  out.width="40%", fig.align="center"}	
+```{r, message=FALSE, warning=FALSE,   fig.align="center"}	
 plotInteractiveSub(val, "primforest", 2010)
 ```
 
@@ -191,7 +191,7 @@ plotInteractiveSub(val, "primforest", 2010)
 plotCombined(valDF, val, "secdforest")
 ```
 
-```{r, message=FALSE, warning=FALSE,  out.width="40%", fig.align="center"} 
+```{r, message=FALSE, warning=FALSE,   fig.align="center"} 
 plotInteractiveSub(val, "secdforest", 2010)
 ```
 
@@ -200,7 +200,7 @@ plotInteractiveSub(val, "secdforest", 2010)
 plotCombined(valDF, val, "urban")
 ```
 
-```{r, message=FALSE, warning=FALSE,  out.width="40%", fig.align="center"}
+```{r, message=FALSE, warning=FALSE,   fig.align="center"}
 plotInteractiveSub(val, "urban", 2010)
 ```
 ## other
@@ -208,6 +208,6 @@ plotInteractiveSub(val, "urban", 2010)
 plotCombined(valDF, val, "other")
 ```
 
-```{r, message=FALSE, warning=FALSE,  out.width="40%", fig.align="center"}
+```{r, message=FALSE, warning=FALSE,   fig.align="center"}
 plotInteractiveSub(val, "other", 2010)
 ```
