@@ -148,25 +148,21 @@ $title magpie
 
 *##################### R SECTION START (VERSION INFO) ##########################
 * 
-* Used data set: rev4.87_h12_magpie.tgz
-* md5sum: 658398f1dcbef89198bd85d61b1db9ad
+* Used data set: rev4.89h12_David_EU_h12_magpie.tgz
+* md5sum: 23e41766f1e84155a15e39e653a7e6e9
 * Repository: /p/projects/rd3mod/inputdata/output
 * 
-* Used data set: rev4.87_h12_fd712c0b_cellularmagpie_c200_MRI-ESM2-0-ssp370_lpjml-8e6c5eb1.tgz
-* md5sum: 8a1d668acfe66a700eb5da2143b31cb2
+* Used data set: rev4.89h12_David_EU_h12_fd712c0b_cellularmagpie_c200_MRI-ESM2-0-ssp370_lpjml-8e6c5eb1.tgz
+* md5sum: f9c4ccb1482162b6b578067755d21e4b
 * Repository: /p/projects/rd3mod/inputdata/output
 * 
-* Used data set: rev4.87_h12_validation.tgz
-* md5sum: d02217d791b58400e6e3be7186527ed5
+* Used data set: rev4.89h12_400_David_EU_h12_validation.tgz
+* md5sum: 86025d66f77a38616204173ead156f91
 * Repository: /p/projects/rd3mod/inputdata/output
 * 
-* Used data set: additional_data_rev4.43.tgz
-* md5sum: NA
-* Repository: https://rse.pik-potsdam.de/data/magpie/public
-* 
-* Used data set: calibration_H12_per_ton_fao_may22_glo_08Jul23.tgz
-* md5sum: 7315d0f268d6225805a4c1f1c3c05b13
-* Repository: /p/projects/landuse/data/input/calibration
+* Used data set: additional_data_rev4.45.tgz
+* md5sum: bb51c8c8608b8b9363582eb4aa220754
+* Repository: /p/projects/landuse/data/input/archive
 * 
 * Low resolution: c200
 * High resolution: 0.5
@@ -179,11 +175,11 @@ $title magpie
 * 
 * Regionscode: 62eff8f7
 * 
-* Regions data revision: 4.87
+* Regions data revision: 4.89
 * 
 * lpj2magpie settings:
 * * LPJmL data: MRI-ESM2-0:ssp370
-* * Revision: 4.87
+* * Revision: 4.89
 * 
 * aggregation settings:
 * * Input resolution: 0.5
@@ -195,7 +191,7 @@ $title magpie
 * * Call: withCallingHandlers(expr, message = messageHandler, warning = warningHandler,     error = errorHandler)
 * 
 * 
-* Last modification (input data): Thu Jul 13 10:36:10 2023
+* Last modification (input data): Mon Sep 25 13:46:56 2023
 * 
 *###################### R SECTION END (VERSION INFO) ###########################
 
@@ -221,7 +217,7 @@ $offlisting
 
 $setglobal c_timesteps  coup2100
 $setglobal c_past  till_2010
-$setglobal c_title  default
+$setglobal c_title  h12_no_yield_calib
 
 scalars
 s_use_gdx   use of gdx files                                       / 0 /
@@ -259,7 +255,7 @@ $setglobal natveg  dynamic_feb21
 
 $setglobal employment  exo_may22
 $setglobal labor_prod  off
-$setglobal factor_costs  per_ton_fao_may22
+$setglobal factor_costs  sticky_feb18
 $setglobal landconversion  calib
 
 $setglobal transport  gtap_nov12
@@ -284,7 +280,7 @@ $setglobal bioenergy  1stgen_priced_dec18
 $setglobal material  exo_flexreg_apr16
 $setglobal livestock  fbask_jan16
 
-$setglobal disagg_lvst  foragebased_aug18
+$setglobal disagg_lvst  foragebased_jul23
 
 $setglobal timber  default
 

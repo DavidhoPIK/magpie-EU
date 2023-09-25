@@ -39,3 +39,7 @@ gamslice.txt
 
 /renv.lock
 .Rproj.user
+
+
+*.RData
+*.g00

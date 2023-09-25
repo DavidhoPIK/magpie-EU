@@ -13,8 +13,8 @@ knitr::opts_knit$set(root.dir = dirname(dirname(dirname(getwd()))) )
 
 ```{r echo = T, results = 'hide', message=FALSE, warning=FALSE}
 # setup working dir and packages, read outputdir
+outputdir<- paste0(getwd(), "/output/v4p81/h16_2023-09-17_22.25.40/")
 readArgs("outputdir")
-#outputdir<- paste0(getwd(), "/output/v4p81/h16_2023-09-17_22.25.40/")
 library(madrat)
 library(mrcommons)
 library(magpie4)
@@ -53,10 +53,7 @@ load("input/spatial_header.rda")
 ##### bind model and refernece data
 val <- mbind(h12Land, LUH2v2) 
 
-##### Make a dataframe out of it.
-
-as.data.frame(val) ->valDF
-valDF %>% pivot_wider(names_from = "Data2", values_from = "Value") -> valDF
+##### extract EU countries
 
 
 ```
@@ -69,10 +66,19 @@ valDF %>% pivot_wider(names_from = "Data2", values_from = "Value") -> valDF
 # Create a plotting functions
 
 # combines a scatter plot with maps and aligns faceting
-plotCombined <- function(valDF, val, type) {
+plotCombined <- function( val, type) {
+
+  as.data.frame(val) ->valDF
+  valDF %>% pivot_wider(names_from = "Data2", values_from = "Value") -> valDF
+
+  eu_cells <- as.numeric(str_extract_all(spatial_header[grepl("EU",spatial_header)],"[0-9]+"))
+  valEU <- val[eu_cells,,]
+  as.data.frame(valEU) ->valDFEU
+  valDFEU %>% pivot_wider(names_from = "Data2", values_from = "Value") -> valDFEU
+
 
   # Create the plots
-  p1 <- plotScatter(valDF, val, type)
+  p1 <- plotScatter(valDFEU, valEU, type)
   p2 <- plotMaps(valDF, type)
   
   # Combine and align the plots using patchwork
@@ -112,13 +118,16 @@ plotScatter <- function(valDF, val, type) {
   # Create the plot with facets
   p <- ggplot(dfSubset, mapping = aes(x=mod, y=ref, reg= Region, cell= Cell, relativeErr = (mod-ref)/ref)) +
     geom_point(size=0.5) +
-    geom_abline(color="#10ff88", size=1.7) + 
+    geom_abline(color="#663939", size=1.5) + 
     facet_wrap(~ Year, scales = "free", ncol = 4) + # Create facets based on 'Year'
-    labs(x="MAgPIE output", y="LUH2v2")
+    labs(x="MAgPIE output", y="LUH2v2")+
+    theme(panel.background = element_rect(fill="gray55"),
+    panel.grid.major = element_line(color = "gray62"),
+    panel.grid.minor = element_line(color = "grey58"))
 
   # Add quality measure text
-  p <- p+ geom_text(x= 0, y=Inf , aes(label = texted), color="#10ff88", 
-    hjust =0, vjust= 1, nudge_x = 10 ,size = 2,
+  p <- p+ geom_text(x= 0, y=Inf , aes(label = texted), color="#ffb5b5", 
+    hjust =0, vjust= 1.1, nudge_x = 10 ,size = 2.3, family = "sans", fontface = "bold",
     data = qualityMeasBinded, inherit.aes = F)
 
   return(p)
@@ -143,9 +152,11 @@ plotMaps <- function(valDF, type) {
 
 # create and interactive scatterplot for eu countries of a year
 plotInteractiveSub <- function(val, type, year) {
+
   eu_cells <- as.numeric(str_extract_all(spatial_header[grepl("EU",spatial_header)],"[0-9]+"))
   val <- val[eu_cells,year,]
-  valDF <- as.data.frame(val)
+
+  as.data.frame(val) ->valDF
   valDF %>% pivot_wider(names_from = "Data2", values_from = "Value") -> valDF
 
   p<- plotScatter(valDF, val, type)
@@ -158,56 +169,62 @@ plotInteractiveSub <- function(val, type, year) {
 
 ## crop
 ```{r,message=FALSE, warning=FALSE, out.width="100%"}
-plotCombined(valDF, val, "crop")
-```
-```{r, message=FALSE, warning=FALSE,   fig.align="center"}
-plotInteractiveSub(val, "crop", 2010)
-```
-
-## pasture
-```{r,message=FALSE, warning=FALSE,  out.width="100%"}
-plotCombined(valDF, val, "past")
+plotCombined(val, "crop")
 ```
 
 ```{r, message=FALSE, warning=FALSE,   fig.align="center"}
-plotInteractiveSub( val, "past", 2010)
-```
-## forestry
-```{r,message=FALSE, warning=FALSE,  out.width="100%"}
-plotCombined(valDF, val, "forestry")
+ plotInteractiveSub(val, "crop", 2010)
 ```
 
-## primforest
+ ## pasture
 ```{r,message=FALSE, warning=FALSE,  out.width="100%"}
-plotCombined(valDF, val, "primforest")
+ plotCombined( val, "past")
+```
+
+```{r, message=FALSE, warning=FALSE,   fig.align="center"}
+ plotInteractiveSub( val, "past", 2010)
+```
+ 
+ ## forestry
+```{r,message=FALSE, warning=FALSE,  out.width="100%"}
+ plotCombined( val, "forestry")
+```
+
+```{r, message=FALSE, warning=FALSE,   fig.align="center"}
+ plotInteractiveSub(val, "forestry", 2010)
+```
+ 
+ ## primforest
+```{r,message=FALSE, warning=FALSE,  out.width="100%"}
+ plotCombined( val, "primforest")
 ```
 
 ```{r, message=FALSE, warning=FALSE,   fig.align="center"}	
-plotInteractiveSub(val, "primforest", 2010)
+ plotInteractiveSub(val, "primforest", 2010)
 ```
 
-## secdforest
+ ## secdforest
 ```{r,message=FALSE, warning=FALSE,  out.width="100%"}
-plotCombined(valDF, val, "secdforest")
+ plotCombined( val, "secdforest")
 ```
-
 ```{r, message=FALSE, warning=FALSE,   fig.align="center"} 
-plotInteractiveSub(val, "secdforest", 2010)
+ plotInteractiveSub(val, "secdforest", 2010)
 ```
 
-## urban
+ ## urban
 ```{r,message=FALSE, warning=FALSE,  out.width="100%"}
-plotCombined(valDF, val, "urban")
+ plotCombined( val, "urban")
 ```
 
 ```{r, message=FALSE, warning=FALSE,   fig.align="center"}
-plotInteractiveSub(val, "urban", 2010)
+ plotInteractiveSub(val, "urban", 2010)
 ```
-## other
+ 
+ ## other
 ```{r,message=FALSE, warning=FALSE,  out.width="100%"}
-plotCombined(valDF, val, "other")
+ plotCombined( val, "other")
 ```
 
 ```{r, message=FALSE, warning=FALSE,   fig.align="center"}
-plotInteractiveSub(val, "other", 2010)
+ plotInteractiveSub(val, "other", 2010)
 ```
