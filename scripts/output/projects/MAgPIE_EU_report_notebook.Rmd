@@ -6,6 +6,15 @@ output:
     code_folding: hide
 ---
 
+<style type="text/css">
+.main-container {
+  max-width: 1300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+
+
 # Setup and read data
 ```{r, setup, include=FALSE}
 knitr::opts_knit$set(root.dir = dirname(dirname(dirname(getwd()))) )
@@ -13,7 +22,7 @@ knitr::opts_knit$set(root.dir = dirname(dirname(dirname(getwd()))) )
 
 ```{r echo = T, results = 'hide', message=FALSE, warning=FALSE}
 # setup working dir and packages, read outputdir
-outputdir<- paste0(getwd(), "/output/v4p81/h16_2023-09-17_22.25.40/")
+# outputdir<- paste0(getwd(), "/output/v4p81/h16_2023-09-17_22.25.40/")
 readArgs("outputdir")
 library(madrat)
 library(mrcommons)
@@ -36,9 +45,10 @@ print(paste0("Script started for output directory: ", outputdir))
 
 ```{r echo = T, results = 'hide', message=FALSE, warning=FALSE}
 # Read modul output and LUH2v2 data, process and bind them.
-
+setConfig(forcecache = F) 
 #### load and process reference data to match with model data
-LUH2v2 <- calcOutput("LanduseInitialisation", aggregate=FALSE, cellular = TRUE, nclasses="seven")
+LUH2v2 <- calcOutput("LanduseInitialisation", aggregate=FALSE, cellular = TRUE, 
+                    nclasses="seven", cells ="magpiecell")
 LUH2v2 <- LUH2v2[,seq(1995,2010,5),]
 getNames(LUH2v2) <- paste0(getNames(LUH2v2),".ref")
 
@@ -99,12 +109,15 @@ plotScatter <- function(valDF, val, type) {
   for (y in as.numeric(gsub("y","",getItems(val,2)))  ) {
 
     meas <- luplot::qualityMeasure(val[,y,paste0(type, ".mod")], val[,y,paste0(type, ".ref")], 
-                                   measures = c("Willmott", "Willmott refined", "Nash Sutcliffe", "RMSE", "MAE"))
+                                   measures = c("Willmott", "Willmott refined", 
+                                                "Nash Sutcliffe", "RMSE", "MAE"))
     
     # Create text for the year facet 
     text=""
     for(i in 1:length(meas)){
-      text<- paste0(text, names(meas)[i], " : ", meas[i], "\n")
+      text<- paste0(text, 
+                    stringr::str_trunc(names(meas)[i], 12, ellipsis = "."), 
+                    " : ", meas[i], "\n")
     }
 
     # Create df for that year
@@ -127,7 +140,7 @@ plotScatter <- function(valDF, val, type) {
 
   # Add quality measure text
   p <- p+ geom_text(x= 0, y=Inf , aes(label = texted), color="#ffb5b5", 
-    hjust =0, vjust= 1.1, nudge_x = 10 ,size = 2.3, family = "sans", fontface = "bold",
+    hjust =0, vjust= 1.1, nudge_x = 10 ,size = 2.6, family = "sans", fontface = "bold",
     data = qualityMeasBinded, inherit.aes = F)
 
   return(p)
@@ -173,58 +186,58 @@ plotCombined(val, "crop")
 ```
 
 ```{r, message=FALSE, warning=FALSE,   fig.align="center"}
- plotInteractiveSub(val, "crop", 2010)
+plotInteractiveSub(val, "crop", 2010)
 ```
 
- ## pasture
+## pasture
 ```{r,message=FALSE, warning=FALSE,  out.width="100%"}
- plotCombined( val, "past")
-```
-
-```{r, message=FALSE, warning=FALSE,   fig.align="center"}
- plotInteractiveSub( val, "past", 2010)
-```
- 
- ## forestry
-```{r,message=FALSE, warning=FALSE,  out.width="100%"}
- plotCombined( val, "forestry")
+plotCombined( val, "past")
 ```
 
 ```{r, message=FALSE, warning=FALSE,   fig.align="center"}
- plotInteractiveSub(val, "forestry", 2010)
+plotInteractiveSub( val, "past", 2010)
 ```
  
- ## primforest
+## forestry
 ```{r,message=FALSE, warning=FALSE,  out.width="100%"}
- plotCombined( val, "primforest")
+plotCombined( val, "forestry")
+```
+
+```{r, message=FALSE, warning=FALSE,   fig.align="center"}
+plotInteractiveSub(val, "forestry", 2010)
+```
+ 
+## primforest
+```{r,message=FALSE, warning=FALSE,  out.width="100%"}
+plotCombined( val, "primforest")
 ```
 
 ```{r, message=FALSE, warning=FALSE,   fig.align="center"}	
- plotInteractiveSub(val, "primforest", 2010)
+plotInteractiveSub(val, "primforest", 2010)
 ```
 
- ## secdforest
+## secdforest
 ```{r,message=FALSE, warning=FALSE,  out.width="100%"}
- plotCombined( val, "secdforest")
+plotCombined( val, "secdforest")
 ```
 ```{r, message=FALSE, warning=FALSE,   fig.align="center"} 
- plotInteractiveSub(val, "secdforest", 2010)
+plotInteractiveSub(val, "secdforest", 2010)
 ```
 
- ## urban
+## urban
 ```{r,message=FALSE, warning=FALSE,  out.width="100%"}
- plotCombined( val, "urban")
+plotCombined( val, "urban")
 ```
 
 ```{r, message=FALSE, warning=FALSE,   fig.align="center"}
- plotInteractiveSub(val, "urban", 2010)
+plotInteractiveSub(val, "urban", 2010)
 ```
  
- ## other
+## other
 ```{r,message=FALSE, warning=FALSE,  out.width="100%"}
- plotCombined( val, "other")
+plotCombined( val, "other")
 ```
 
 ```{r, message=FALSE, warning=FALSE,   fig.align="center"}
- plotInteractiveSub(val, "other", 2010)
+plotInteractiveSub(val, "other", 2010)
 ```

@@ -148,16 +148,16 @@ $title magpie
 
 *##################### R SECTION START (VERSION INFO) ##########################
 * 
-* Used data set: rev4.89h12_David_EU_h12_magpie.tgz
-* md5sum: 23e41766f1e84155a15e39e653a7e6e9
+* Used data set: rev4.89h16_David_EU_36f73207_magpie.tgz
+* md5sum: 04a364eec5dacd9a30ca1ddaed42a688
 * Repository: /p/projects/rd3mod/inputdata/output
 * 
-* Used data set: rev4.89h12_David_EU_h12_fd712c0b_cellularmagpie_c200_MRI-ESM2-0-ssp370_lpjml-8e6c5eb1.tgz
-* md5sum: f9c4ccb1482162b6b578067755d21e4b
+* Used data set: rev4.89h16_David_EU_36f73207_bd86374e_cellularmagpie_c200_MRI-ESM2-0-ssp370_lpjml-8e6c5eb1_clusterweight-ba4466a8.tgz
+* md5sum: 6951b397bce0a55dce27024759dec6f9
 * Repository: /p/projects/rd3mod/inputdata/output
 * 
-* Used data set: rev4.89h12_400_David_EU_h12_validation.tgz
-* md5sum: 86025d66f77a38616204173ead156f91
+* Used data set: rev4.89h16_David_EU_36f73207_validation.tgz
+* md5sum: 31ee9cd28d674f3d83de15bd9c842198
 * Repository: /p/projects/rd3mod/inputdata/output
 * 
 * Used data set: additional_data_rev4.45.tgz
@@ -170,10 +170,10 @@ $title magpie
 * Total number of cells: 200
 * 
 * Number of cells per region:
-*   CAZ  CHA  EUR  IND  JPN  LAM  MEA  NEU  OAS  REF  SSA  USA
-*     6   17    9    8    1   44   26    7   10   13   38   21
+*   CAZ  CHA  DEU  EUC  EUN  EUS  EUW  IND  JPN  LAM  MEA  NEU  OAS  REF  SSA  USA
+*     5   14    3    4    2   31    7    6    1   34   20    5    7   12   33   16
 * 
-* Regionscode: 62eff8f7
+* Regionscode: 36f73207
 * 
 * Regions data revision: 4.89
 * 
@@ -184,14 +184,14 @@ $title magpie
 * aggregation settings:
 * * Input resolution: 0.5
 * * Output resolution: c200
-* * Regionscode: 62eff8f7
+* * Regionscode: 36f73207
 * * Number of clusters per region:
-*   CAZ  CHA  EUR  IND  JPN  LAM  MEA  NEU  OAS  REF  SSA  USA
-*     6   17    9    8    1   44   26    7   10   13   38   21
+*   CAZ  CHA  DEU  EUC  EUN  EUS  EUW  IND  JPN  LAM  MEA  NEU  OAS  REF  SSA  USA
+*     5   14    3    4    2   31    7    6    1   34   20    5    7   12   33   16
 * * Call: withCallingHandlers(expr, message = messageHandler, warning = warningHandler,     error = errorHandler)
 * 
 * 
-* Last modification (input data): Mon Sep 25 13:46:56 2023
+* Last modification (input data): Thu Oct  5 13:33:01 2023
 * 
 *###################### R SECTION END (VERSION INFO) ###########################
 
@@ -217,7 +217,7 @@ $offlisting
 
 $setglobal c_timesteps  coup2100
 $setglobal c_past  till_2010
-$setglobal c_title  h12_no_yield_calib
+$setglobal c_title  h16_no_calib
 
 scalars
 s_use_gdx   use of gdx files                                       / 0 /
