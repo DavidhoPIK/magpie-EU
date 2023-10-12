@@ -1,0 +1,165 @@
+---
+title: "Compare MAgPIE EU with LUH Data"
+output:
+  html_document:
+    df_print: paged
+    code_folding: hide
+---
+
+<style type="text/css">
+.main-container {
+  max-width: 1300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+
+
+# Setup and read data
+```{r, setup, include=FALSE}
+knitr::opts_knit$set(root.dir = dirname(dirname(dirname(getwd()))) )
+```
+
+```{r echo = T, results = 'hide', message=FALSE, warning=FALSE}
+# setup working dir and packages, read outputdir
+# outputdir<- paste0(getwd(), "/output/v4p81/h16_2023-09-17_22.25.40/")
+readArgs("outputdir")
+library(madrat)
+library(mrcommons)
+library(magpie4)
+library(ggplot2)
+library(plotly)
+library(gridExtra)
+library(patchwork)
+
+library(dplyr)
+library(tidyr)
+library(stringr)
+```
+
+```{r}
+print(paste0("Script started for output directory: ", outputdir))
+```
+
+```{r}
+get_relevant_calib_filenames <- function(directory) {
+  # List all files in the directory
+  all_files <- list.files(directory, full.names = TRUE)
+  
+  # Filter files that contain the string "DavidH" in the filename
+  matched_files <- grep("calibtration_testing_DavidH", all_files, val_cropue = TRUE)
+  
+  return(matched_files)
+}
+
+extract_run_name_from_filename <- function(filename) {
+  
+  # cut off the begiining of the filename
+  run_name <- stringr::str_extract(filename, "(?<=DavidH_).*")
+
+  # remove thes string indication that the run used yield calibration 
+  run_name <- stringr::str_remove(run_name, "with_yld_calib_")
+
+  # remove ending
+  run_name <- stringr::str_remove(run_name, ".tgz")
+  
+  return(run_name)
+}
+
+read_calibration_factors_as_list_of_dataframes <- function(filename_list) {
+  dir_to_remove <- "./output/__calibration_factors/"
+  if (file.exists(dir_to_remove)) {
+    unlink(dir_to_remove, recursive = TRUE)
+  }
+  dataframe_list <- NULL
+  for(i in seq_along(filename_list)) {
+    run_name <- extract_run_name_from_filename(filename_list[i])
+    untar(filename_list[i], exdir = paste0("./output/__calibration_factors/", run_name) )
+    calib_factors <- read.csv(paste0("./output/__calibration_factors/", run_name, "/f14_yld_calib.csv"),
+                                    comment.char = "*")
+    names(calib_factors)[1] <- "region"
+    # add the entry to the list and have the name of the list entry be the run name
+    dataframe_list[[run_name]] <- calib_factors
+  }
+  return(dataframe_list)
+}
+
+color_print_cal_factor_df <- function(cal_factor_df, name){
+  cat(name, "\n")
+  cat("REG  CROP   PASTURE\n")
+  for(i in seq_along(cal_factor_df$crop)) {
+    cat(cal_factor_df$region[i], " ")
+    val_crop <- cal_factor_df$crop[i]
+    color <- make_style( rgb(0.5 , 0.5, max(min(0.5-(val_crop^2-1), 1),0)) )
+    cat(color(format(val_crop, nsmall =2)), "  ")
+    val_past <- cal_factor_df$past[i]
+    color <- make_style( rgb(0.5 , 0.5, max(min(0.5-(val_past^2-1), 1),0)) )
+    cat(color(format(val_past, nsmall =2)))
+    cat("\n")
+  }
+
+}
+
+color_print_cal_factor_df_hor <- function(cal_factor_df, name, deviation_thresh = 0.1){
+  define_col_based_on_val <- function(val){
+    if(abs(val-1)< deviation_thresh){
+    return(make_style( rgb(0.5 , 0.5, max(min(0.5-(val^2-1), 1),0)) ))
+    }
+    else{
+    return(make_style( rgb(0.5 , 0.5, max(min(0.5-(val^2-1), 1),0)), bg=T ))
+    }
+  }
+
+  # regions in first row
+  cat(name, "\n")
+  cat("REG   ")
+  for(i in seq_along(cal_factor_df$crop)) {
+    cat(cal_factor_df$region[i], "  ")
+  }
+
+  # crop values in sec row
+  cat("\n")
+  cat("CROP  ")
+  for(i in seq_along(cal_factor_df$crop)) {
+    val_crop <- cal_factor_df$crop[i]
+    color <- define_col_based_on_val(val_crop)
+    cat(color(format(as.numeric(val_crop), nsmall =2)), " ")
+  }
+
+  # pasture values in third row
+  cat("\n")
+  cat("PAST  ")
+  for(i in seq_along(cal_factor_df$crop)) {
+    val_past <- cal_factor_df$past[i]
+    color <- define_col_based_on_val(val_past)
+    cat(color(format(as.numeric(val_past), nsmall =2)), " ")
+  }
+  cat("\n \n")
+
+}
+```
+
+```{r}
+
+path_to_calibration_archive <- "/p/projects/landuse/data/input/calibration"
+
+filename_list <- get_relevant_calib_filenames(path_to_calibration_archive)
+
+calib_factors_list <- read_calibration_factors_as_list_of_dataframes(filename_list)
+
+calib_factors_list
+
+for(run in seq_along(calib_factors_list)) {
+
+  color_print_cal_factor_df_hor(calib_factors_list[[run]], names(calib_factors_list[run]), 0.1)
+}
+
+```
+
+```{r}
+
+```
+
+```{r}
+}
+```
