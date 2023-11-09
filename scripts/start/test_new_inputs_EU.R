@@ -67,8 +67,8 @@ cfg$title  <- "h12_c400"
 cfg        <- setScenario(cfg,c("SSP2","NDC", "ForestryEndo"))
 cfg$gms$s13_ignore_tau_historical <- 1
 cfg$gms$factor_costs <- "sticky_feb18"  
-start_run(cfg,codeCheck=FALSE)
-magpie4::submitCalibration(name = "h12_c400")
+#start_run(cfg,codeCheck=FALSE)
+#magpie4::submitCalibration(name = "h12_c400")
 
 # ---- H16
 cfg$input <- c(regional    = "rev4.89h16_David_EU_36f73207_magpie.tgz",
@@ -98,7 +98,19 @@ cfg$gms$factor_costs <- "sticky_feb18"
 
 
 
+# ---- H16S5 uniform EU feedbaskets
+cfg$input <- c(regional    = "rev4.89h16s5_David_EU_1028489d_magpie.tgz",
+               cellular    = "rev4.89h16s5_David_EU_1028489d_bd86374e_cellularmagpie_c200_MRI-ESM2-0-ssp370_lpjml-8e6c5eb1_clusterweight-ba4466a8.tgz",
+               validation  = "rev4.89h16s5_David_EU_1028489d_validation.tgz",
+               additional  = "additional_data_rev4.45.tgz",
+               patch = "patchFeedBaskets.tgz")
 
+cfg$title  <- "h16s5"
+cfg        <- setScenario(cfg,c("SSP2","NDC", "ForestryEndo"))
+cfg$gms$s13_ignore_tau_historical <- 1
+cfg$gms$factor_costs <- "sticky_feb18"  
+start_run(cfg,codeCheck=FALSE)
+magpie4::submitCalibration(name = "h16s5")
 
 # # Free trade runs
 # cfg$title  <- "ssp2_h11e5_free_trade_uncalib"
