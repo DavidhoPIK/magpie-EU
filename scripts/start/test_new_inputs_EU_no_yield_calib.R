@@ -156,20 +156,21 @@ cfg$recalibrate_landconversion_cost <- FALSE
 # #start_run(cfg,codeCheck=FALSE)
 
 
-# # ---- H16S5
-cfg$input <- c(regional    = "rev4.89h16s5_David_EU_1028489d_magpie.tgz",
-               cellular    = "rev4.89h16s5_David_EU_1028489d_bd86374e_cellularmagpie_c200_MRI-ESM2-0-ssp370_lpjml-8e6c5eb1_clusterweight-ba4466a8.tgz",
-               validation  = "rev4.89h16s5_David_EU_1028489d_validation.tgz",
-               additional  = "additional_data_rev4.45.tgz")
+# # # ---- H16S5
+# cfg$input <- c(regional    = "rev4.89h16s5_David_EU_1028489d_magpie.tgz",
+#                cellular    = "rev4.89h16s5_David_EU_1028489d_bd86374e_cellularmagpie_c200_MRI-ESM2-0-ssp370_lpjml-8e6c5eb1_clusterweight-ba4466a8.tgz",
+#                validation  = "rev4.89h16s5_David_EU_1028489d_validation.tgz",
+#                additional  = "additional_data_rev4.45.tgz")
 
-cfg$title  <- "h16s5_no_calib_bilateral_trade"
-cfg        <- setScenario(cfg,c("SSP2", "NDC", "ForestryEndo"))
-cfg$gms$s13_ignore_tau_historical <- 1
-cfg$gms$factor_costs <- "sticky_feb18"
-start_run(cfg,codeCheck=FALSE) # produces error
+# cfg$title  <- "h16s5_no_calib_bilateral_trade"
+# cfg        <- setScenario(cfg,c("SSP2", "NDC", "ForestryEndo"))
+# cfg$gms$s13_ignore_tau_historical <- 1
+# cfg$gms$factor_costs <- "sticky_feb18"
+# cfg$gms$trade <- "selfsuff_reduced_bilateral22"
+# start_run(cfg,codeCheck=FALSE) # produces error
 
-# set back to default
-cfg$gms$trade <- "selfsuff_reduced"
+# # set back to default
+# cfg$gms$trade <- "selfsuff_reduced"
 
 # ------ uniform EU feedbaskets
 
@@ -190,3 +191,17 @@ cfg$gms$trade <- "selfsuff_reduced"
 # cfg$gms$factor_costs <- "sticky_feb18"  
 # start_run(cfg, codeCheck=FALSE)
 
+# Sticky livestock 
+
+# ---- H16S5
+cfg$input <- c(regional    = "rev4.89h16s5_David_EU_1028489d_magpie.tgz",
+               cellular    = "rev4.89h16s5_David_EU_1028489d_bd86374e_cellularmagpie_c200_MRI-ESM2-0-ssp370_lpjml-8e6c5eb1_clusterweight-ba4466a8.tgz",
+               validation  = "rev4.89h16s5_David_EU_1028489d_validation.tgz",
+               additional  = "additional_data_rev4.45.tgz")
+
+cfg$title  <- "h16s5_no_calib_sticky_livestock"
+cfg        <- setScenario(cfg,c("SSP2", "NDC", "ForestryEndo"))
+cfg$gms$s13_ignore_tau_historical <- 1
+cfg$gms$factor_costs <- "sticky_feb18"
+cfg$gms$livestock <- "fbask_jan16_sticky"
+start_run(cfg,codeCheck=FALSE)
