@@ -204,4 +204,26 @@ cfg        <- setScenario(cfg,c("SSP2", "NDC", "ForestryEndo"))
 cfg$gms$s13_ignore_tau_historical <- 1
 cfg$gms$factor_costs <- "sticky_feb18"
 cfg$gms$livestock <- "fbask_jan16_sticky"
+# start_run(cfg,codeCheck=FALSE)
+
+# ---- H16S5 regional sticky livestock
+cfg$gms$livestock <- "fbask_jan16_sticky_regional"
+cfg$title  <- "h16s5_no_calib_sticky_livestock_regional_ext_EUav_cap_need"
 start_run(cfg,codeCheck=FALSE)
+
+
+# ---- H16S5 regional sticky livestock no disagg no sticky normal
+cfg$gms$livestock <- "fbask_jan16_sticky_regional"
+cfg$title  <- "h16s5_noC_sticky_livst_reg_a_o_off_qT_high_cap_need"
+cfg$gms$factor_costs <- "per_ton_fao_may22"
+cfg$gms$disagg_lvst <- "off"
+cfg$gms$c_timesteps <- "quicktest"
+#start_run(cfg,codeCheck=FALSE)
+
+# ---- H16S5 regional sticky livestock no disagg no sticky normal full run
+cfg$gms$livestock <- "fbask_jan16_sticky_regional"
+cfg$title  <- "h16s5_noC_sticky_livst_reg_a_o_off"
+cfg$gms$factor_costs <- "per_ton_fao_may22"
+cfg$gms$disagg_lvst <- "off"
+cfg$gms$c_timesteps <- "coup2100"
+#start_run(cfg,codeCheck=FALSE)

@@ -5,10 +5,6 @@
 # |  Contact: magpie@pik-potsdam.de
 
 
-############################################################
-#### Script for the generation of COACCH simulations ####
-############################################################
-
 library(lucode2)
 library(gms)
 source("scripts/start_functions.R")
@@ -18,8 +14,10 @@ source("config/default.cfg")
 # Calibrate yields
 cfg$recalibrate <- FALSE
 cfg$recalibrate_landconversion_cost <- FALSE
-cfg$title <- "sticky_livestock"
-cfg$gms$livestock <- "fbask_jan16_sticky"
 
+cfg$title <- "sticky_livestock_regional"
+cfg$gms$c_timesteps <- "quicktest"
 
-start_run(cfg, codeCheck=FALSE)
+cfg$gms$livestock <- "fbask_jan16_sticky_regional"
+
+start_run(cfg, codeCheck=TRUE)
