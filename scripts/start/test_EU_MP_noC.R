@@ -209,7 +209,7 @@ cfg$gms$livestock <- "fbask_jan16_sticky"
 # ---- H16S5 regional sticky livestock
 cfg$gms$livestock <- "fbask_jan16_sticky_regional"
 cfg$title  <- "h16s5D_noC_stick_livst_reg_high_cap_need"
-cfg$gms$s70_multiplicator_capital_need <- 3 #def =1
+cfg$gms$s70_multiplicator_capital_need <- 1 #def =1
 start_run(cfg,codeCheck=FALSE)
 
 

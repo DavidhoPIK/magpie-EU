@@ -76,7 +76,7 @@ p70_capital_need_immobile(t,h,kli) = sum(supreg(h,i),
                                       *sum((sys_to_kli(sys,kli)),i70_livestock_productivity(t,i,sys)))      
                                       *p70_cost_share_livst(t,i,"capital")                        
                                       / (pm_interest(t,i)+s70_depreciation_rate)
-                                      )/sum(supreg(h,i),1) * 10;                         
+                                      )/sum(supreg(h,i),1) * s70_multiplicator_capital_need;                         
 
 if (ord(t) = 1,
 
