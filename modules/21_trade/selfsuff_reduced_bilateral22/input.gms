@@ -14,6 +14,7 @@ scalars
   s21_trade_tariff_startyear year to start fading out trade tariffs                / 2020 /
   s21_trade_tariff_targetyear year to finish fading out trade tariffs              / 2050 /
   s21_trade_bal_damper Fraction to ease self sufficiency pool trade for roundwood  /0.75/
+  s21_intra_supreg_tariff Intra-superregional trade tariffs                      / 0 /
 ;
 
 table f21_trade_bal_reduction(t_all,trade_groups21,trade_regime21) Share of inelastic trade pool (1)

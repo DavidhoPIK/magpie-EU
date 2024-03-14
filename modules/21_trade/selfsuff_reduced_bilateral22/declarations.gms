@@ -29,7 +29,7 @@ equations
  q21_trade_reg_up(h,k_trade)             Superregional trade balances i.e. maximum self-sufficiency ratio (1)
  q21_excess_dem(k_trade)                 Global excess demand (mio. tDM per yr)
  q21_excess_supply(h,k_trade)            Superregional excess production (mio. tDM per yr)
- q21_trade_bilat(h, k_trade)             Superregional bilateral trade requirements (mio. tDM per yr)
+ q21_trade_bilat(i, k_trade)             Regional bilateral trade requirements (mio. tDM per yr)
  q21_costs_tariffs(i, k_trade)           Regional  trade tariff costs (mio. USD05MER per yr)
  q21_costs_margins(i,k_trade)            Regional bilateral trade requirements
  q21_cost_trade_reg(i,k_trade)           Regional trade costs for each tradable commodity (mio. USD05MER per yr)

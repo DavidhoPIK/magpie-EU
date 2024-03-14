@@ -21,6 +21,13 @@ elseif (s21_trade_tariff=0),
     i21_trade_tariff(t_all, i_ex,i_im,k_trade) = 0;
 );
 
+* If s21_intra_supreg_tariff = 0, set intra superregional trade tarrifs to 0 
+if((s21_intra_supreg_tariff=0),
+    loop(h2,
+        i21_trade_tariff(t_all, i_ex,i_im,k_trade) $ (supreg(h2,i_ex) and supreg(h2,i_im)) = 0;
+    );
+);
+
 if ((s21_trade_tariff_fadeout=1),
 loop(t_all,
    i21_trade_tariff(t_all,i_ex,i_im,k_trade)$(m_year(t_all) > s21_trade_tariff_startyear AND m_year(t_all) < s21_trade_tariff_targetyear) = (1-((m_year(t_all)-s21_trade_tariff_startyear) /
