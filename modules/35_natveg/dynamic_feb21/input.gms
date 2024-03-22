@@ -5,12 +5,12 @@
 *** |  MAgPIE License Exception, version 1.0 (see LICENSE file).
 *** |  Contact: magpie@pik-potsdam.de
 
-$setglobal c35_ad_policy  npi
-$setglobal c35_aolc_policy  npi
+$setglobal c35_ad_policy  ndc
+$setglobal c35_aolc_policy  ndc
 $setglobal c35_shock_scenario  none
 
 scalars
-s35_hvarea Flag for harvested area (0=zero 1=exognous 2=endogneous) / 0 /
+s35_hvarea Flag for harvested area (0=zero 1=exognous 2=endogneous) / 2 /
 s35_hvarea_secdforest annual secdforest harvest rate for s35_hvarea equals 1 (percent per year) / 0 /
 s35_hvarea_primforest annual primforest harvest rate for s35_hvarea equals 1 (percent per year) / 0 /
 s35_hvarea_other annual other land harvest rate for s35_hvarea equals 1 (percent per year) / 0 /

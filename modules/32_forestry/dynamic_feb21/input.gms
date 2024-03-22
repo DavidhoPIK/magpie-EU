@@ -8,7 +8,7 @@ $setglobal c32_timber_plantations  plantations
 * option: natveg, plantations
 $setglobal c32_aff_mask  noboreal
 * options: unrestricted, noboreal, onlytropical
-$setglobal c32_aff_policy  npi
+$setglobal c32_aff_policy  ndc
 * options: none, npi, ndc
 $setglobal c32_aff_bgp  nobgp
 * options: ann,nobgp
@@ -29,14 +29,14 @@ $setglobal c32_shock_scenario  none
 
 
 scalars
-  s32_hvarea                      Flag for harvested area and establishemt (0=zero 1=exognous 2=endogneous) / 0 /
+  s32_hvarea                      Flag for harvested area and establishemt (0=zero 1=exognous 2=endogneous) / 2 /
   s32_reESTBcost                  Re establishment cost (USD per ha) / 2000 /
   s32_recurring_cost              Recurring costs (USD per ha) / 500 /
   s32_harvesting_cost             Harvesting cost (USD per ha) / 1000 /
   s32_planing_horizon             Afforestation planing horizon (years)            / 50 /
   s32_rotation_extension          Rotation extension factor 1=original rotations 2=100 percent increase in rotations etc (1) / 1 /
   s32_faustmann_rotation          Switch to activate faustmann rotations (1=on 0=off) / 0 /
-  s32_initial_distribution        Switch to Activate ageclass distribution in plantations 0=off 1=equal distribution 2=FAO distribution 3=Poulter distribution 4=Manual distribution (1) / 0 /
+  s32_initial_distribution        Switch to Activate ageclass distribution in plantations 0=off 1=equal distribution 2=FAO distribution 3=Poulter distribution 4=Manual distribution (1) / 4 /
   s32_price                       Price for timber (USD)      / 45 /
   s32_free_land_cost              Very high cost for using non existing land for plantation establishment (USD per ha) /1000000/
   s32_max_aff_area                Maximum total global afforestation (mio. ha)    / Inf /
@@ -46,7 +46,7 @@ scalars
   s32_max_self_suff               Upper ceiling for the self sufficiency used in calculation for establishment decision (1) / 0.8 /
   s32_aff_bii_coeff               BII coefficent to be used for CO2 price driven afforestation 0=natural vegetation 1=plantation (1) / 0 /
   s32_max_aff_area_glo            Switch for global or regional afforestation constraint (1) / 1 /
-  s32_aff_prot                    Switch for protection of afforested areas (0=until end of planning horizon 1=forever) / 0 /
+  s32_aff_prot                    Switch for protection of afforested areas (0=until end of planning horizon 1=forever) / 1 /
 ;
 
 parameter f32_aff_mask(j) afforestation mask (binary)

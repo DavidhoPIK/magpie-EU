@@ -18,12 +18,13 @@ sets
     / CAZ, CHA, EUR, IND, JPN, LAM, MEA, NEU, OAS, REF, SSA, USA /
 
   i all economic regions
-    / CAZ, CHA, EUR, IND, JPN, LAM, MEA, NEU, OAS, REF, SSA, USA /
+    / CAZ, CHA, DEU, EUC, EUN, EUS, EUW, IND, JPN, LAM, MEA, NEU, OAS, REF,
+      SSA, USA /
 
   supreg(h,i) mapping of superregions to its regions
     / CAZ . (CAZ)
       CHA . (CHA)
-      EUR . (EUR)
+      EUR . (EUN, EUW, EUC, EUS, DEU)
       IND . (IND)
       JPN . (JPN)
       LAM . (LAM)
@@ -55,39 +56,49 @@ sets
       VEN, VGB, VIR, VNM, VUT, WLF, WSM, YEM, ZAF, ZMB, ZWE /
 
   j number of LPJ cells
-    / CAZ_1*CAZ_14,
-      CHA_15*CHA_37,
-      EUR_38*EUR_47,
-      IND_48*IND_54,
-      JPN_55*JPN_58,
-      LAM_59*LAM_84,
-      MEA_85*MEA_105,
-      NEU_106*NEU_114,
-      OAS_115*OAS_130,
-      REF_131*REF_153,
-      SSA_154*SSA_185,
-      USA_186*USA_200 /
+    / CAZ_1*CAZ_10,
+      CHA_11*CHA_28,
+      DEU_29*DEU_30,
+      EUC_31*EUC_35,
+      EUN_36*EUN_42,
+      EUS_43*EUS_62,
+      EUW_63*EUW_71,
+      IND_72*IND_76,
+      JPN_77*JPN_80,
+      LAM_81*LAM_101,
+      MEA_102*MEA_118,
+      NEU_119*NEU_127,
+      OAS_128*OAS_142,
+      REF_143*REF_160,
+      SSA_161*SSA_188,
+      USA_189*USA_200 /
 
   cell(i,j) number of LPJ cells per region i
-    / CAZ . (CAZ_1*CAZ_14)
-      CHA . (CHA_15*CHA_37)
-      EUR . (EUR_38*EUR_47)
-      IND . (IND_48*IND_54)
-      JPN . (JPN_55*JPN_58)
-      LAM . (LAM_59*LAM_84)
-      MEA . (MEA_85*MEA_105)
-      NEU . (NEU_106*NEU_114)
-      OAS . (OAS_115*OAS_130)
-      REF . (REF_131*REF_153)
-      SSA . (SSA_154*SSA_185)
-      USA . (USA_186*USA_200) /
+    / CAZ . (CAZ_1*CAZ_10)
+      CHA . (CHA_11*CHA_28)
+      DEU . (DEU_29*DEU_30)
+      EUC . (EUC_31*EUC_35)
+      EUN . (EUN_36*EUN_42)
+      EUS . (EUS_43*EUS_62)
+      EUW . (EUW_63*EUW_71)
+      IND . (IND_72*IND_76)
+      JPN . (JPN_77*JPN_80)
+      LAM . (LAM_81*LAM_101)
+      MEA . (MEA_102*MEA_118)
+      NEU . (NEU_119*NEU_127)
+      OAS . (OAS_128*OAS_142)
+      REF . (REF_143*REF_160)
+      SSA . (SSA_161*SSA_188)
+      USA . (USA_189*USA_200) /
 
   i_to_iso(i,iso) mapping regions to iso countries
     / CAZ . (AUS, CAN, HMD, NZL, SPM)
       CHA . (CHN, HKG, MAC, TWN)
-      EUR . (ALA, AUT, BEL, BGR, CYP, CZE, DEU, DNK, ESP, EST, FIN, FRA, FRO)
-      EUR . (GBR, GGY, GIB, GRC, HRV, HUN, IMN, IRL, ITA, JEY, LTU, LUX, LVA)
-      EUR . (MLT, NLD, POL, PRT, ROU, SVK, SVN, SWE)
+      DEU . (DEU)
+      EUC . (BGR, CZE, EST, HRV, HUN, LTU, LVA, POL, ROU, SVK, SVN)
+      EUN . (ALA, DNK, FIN, FRO, GBR, GGY, GIB, IMN, IRL, JEY, SWE)
+      EUS . (CYP, ESP, GRC, ITA, MLT, PRT)
+      EUW . (AUT, BEL, FRA, LUX, NLD)
       IND . (IND)
       JPN . (JPN)
       LAM . (ABW, AIA, ARG, ATA, ATG, BES, BHS, BLM, BLZ, BMU, BOL, BRA, BRB)

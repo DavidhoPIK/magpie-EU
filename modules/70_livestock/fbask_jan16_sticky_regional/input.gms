@@ -25,7 +25,7 @@ scalars
   s70_pyld_intercept     Intercept of linear relationship determining pasture intensification (1)        / 0.24 /
   s70_past_mngmnt_factor_fix  Year until the pasture management factor is fixed to 1    / 2005 /  
   s70_depreciation_rate depreciation rate (share of costs)  / 0.05 /
-  s70_multiplicator_capital_need Multiplicator for capital need in livestock production  / 10 /
+  s70_multiplicator_capital_need Multiplicator for capital need in livestock production  / 2 /
 ;
 
 table f70_feed_baskets(t_all,i,kap,kall,feed_scen70) Feed baskets in tDM per tDM livestock product (1)
@@ -78,13 +78,13 @@ $include "./modules/70_livestock/fbask_jan16_sticky_regional/input/f70_hist_cap_
 $offdelim
 ;
 
-table f70_hist_factor_costs_livst(i,kli) Historical factor costs in livestock production (mio. USD05MER)
+table f70_hist_factor_costs_livst(t_all,i,kli) Historical factor costs in livestock production (mio. USD05MER)
 $ondelim
-$include "./modules/70_livestock/fbask_jan16_sticky_regional/input/f70_hist_factor_costs_livst.csv"
+$include "./modules/70_livestock/fbask_jan16_sticky_regional/input/f70_hist_factor_costs_livst.cs3"
 $offdelim
 ;
 
-table f70_hist_prod_livst(i,kli,attributes) Historical production quantity of livestock products (mio. t)
+table f70_hist_prod_livst(t_all,i,kli,attributes) Historical production quantity of livestock products (mio. t)
 $ondelim
 $include "./modules/70_livestock/fbask_jan16_sticky_regional/input/f70_hist_prod_livst.cs3"
 $offdelim
