@@ -1,0 +1,244 @@
+---
+title: "Compare MAgPIE EU with LUH Data"
+output:
+  html_document:
+    df_print: paged
+    code_folding: hide
+---
+
+<style type="text/css">
+.main-container {
+  max-width: 1300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+
+
+# Setup and read data
+```{r, setup, include=FALSE}
+knitr::opts_knit$set(root.dir = dirname(dirname(dirname(getwd()))) )
+```
+
+```{r echo = T, results = 'hide', message=FALSE, warning=FALSE}
+# setup working dir and packages, read outputdir
+# outputdir<- paste0(getwd(), "/output/v4p81/h16_2023-09-17_22.25.40/")
+readArgs("outputdir")
+library(madrat)
+library(mrcommons)
+library(magpie4)
+
+library(ggplot2)
+library(plotly)
+library(gridExtra)
+library(patchwork)
+
+library(dplyr)
+library(tidyr)
+library(stringr)
+
+```
+
+```{r}
+print(paste0("Script started for output directory: ", outputdir))
+```
+
+```{r echo = T, results = 'hide', message=FALSE, warning=FALSE}
+# Read modul output and LUH2v2 data, process and bind them.
+setConfig(forcecache = F) 
+#### load and process reference data to match with model data
+LUH2v2 <- calcOutput("LanduseInitialisation", aggregate=FALSE, cellular = TRUE, 
+                    nclasses="seven", cells ="lpjmlcell")
+LUH2v2 <- LUH2v2[,seq(1995,2010,5),]
+getNames(LUH2v2) <- paste0(getNames(LUH2v2),".ref")
+
+#### load and process model data to match with reference data
+path2landoutput <- file.path(outputdir, "cell.land_0.5.mz")
+h12Land <- read.magpie(path2landoutput)
+h12Land <- h12Land[,seq(1995,2010,5),]
+getNames(h12Land) <- paste0(getNames(h12Land), ".mod")
+load("input/spatial_header.rda")
+
+
+##### bind model and refernece data
+val <- mbind(h12Land, LUH2v2) 
+
+##### extract EU countries
+
+
+```
+
+
+# Plot data
+
+
+```{r echo = T, results = 'hide'}
+# Create a plotting functions
+
+# combines a scatter plot with maps and aligns faceting
+plotCombined <- function( val, type) {
+
+  as.data.frame(val) -> valDF
+  valDF %>% pivot_wider(names_from = "Data2", values_from = "Value") -> valDF
+
+  eu_cells <- as.numeric(str_extract_all(spatial_header[grepl("EU",spatial_header)],"[0-9]+"))
+  valEU <- val[eu_cells,,]
+  as.data.frame(valEU) -> valDFEU
+  valDFEU %>% pivot_wider(names_from = "Data2", values_from = "Value") -> valDFEU
+
+  print(valDF)
+
+  # Create the plots
+  p1 <- plotScatter(valDFEU, valEU, type)
+  p2 <- plotMaps(valDF, type)
+
+  # Combine and align the plots using patchwork
+  combined_plot <- p1 / p2
+
+  # Print the combined plot
+  print(combined_plot)
+  
+}
+
+# create scatter plot
+plotScatter <- function(valDF, val, type) {
+  
+  dfSubset <- valDF[valDF$Data1 == type, ] # extract requested type from data
+
+  # Create quality measure dataframe
+  qualityMeas <- NULL # list of dataframes, one for each year
+  for (y in as.numeric(gsub("y","",getItems(val,2)))  ) {
+
+    meas <- luplot::qualityMeasure(val[,y,paste0(type, ".mod")], val[,y,paste0(type, ".ref")], 
+                                   measures = c("Willmott", "Willmott refined", 
+                                                "Nash Sutcliffe", "RMSE", "MAE"))
+    
+    # Create text for the year facet 
+    text=""
+    for(i in 1:length(meas)){
+      text<- paste0(text, 
+                    stringr::str_trunc(names(meas)[i], 12, ellipsis = "."), 
+                    " : ", meas[i], "\n")
+    }
+
+    # Create df for that year
+    qualityMeas[[y]] <- data.frame(
+      Year = y,
+      texted = text
+    )
+  }
+  qualityMeasBinded <- dplyr::bind_rows(qualityMeas) # bind all year dataframes
+
+  # Create the plot with facets
+  p <- ggplot(dfSubset, mapping = aes(x=mod, y=ref, reg= Region, cell= Cell, relativeErr = (mod-ref)/ref)) +
+    geom_point(size=0.5) +
+    geom_abline(color="#663939", size=1.5) + 
+    facet_wrap(~ Year, scales = "free", ncol = 4) + # Create facets based on 'Year'
+    labs(x="MAgPIE output", y="LUH2v2")+
+    theme(panel.background = element_rect(fill="gray55"),
+    panel.grid.major = element_line(color = "gray62"),
+    panel.grid.minor = element_line(color = "grey58"))
+
+  # Add quality measure text
+  p <- p+ geom_text(x= 0, y=Inf , aes(label = texted), color="#ffb5b5", 
+    hjust =0, vjust= 1.1, nudge_x = 10 ,size = 2.6, family = "sans", fontface = "bold",
+    data = qualityMeasBinded, inherit.aes = F)
+
+  return(p)
+
+}
+
+# create maps
+plotMaps <- function(valDF, type) {
+
+  # create a ggplot object using luplot
+  relErr <- (val[,,paste0(type,".mod")]- val[,,paste0(type,".ref")])/(val[,,paste0(type,".ref")])
+  p <- luplot::plotmap2(relErr, legend_range = c(-2,2), legendname = "rel\nerror", ncol = 4,
+      midcol = "#ffffff", lowcol = "blue", highcol = "red", midpoint = 0, title = "")
+
+  # adjust the plot
+  p <- p +   coord_sf(xlim = c(-10, 40), ylim = c(35, 70)) + facet_wrap( ~ Year, ncol=4) + 
+              theme(aspect.ratio = 1, legend.title = element_text(size=8) )
+  
+  p <- p + guides(fill = guide_colorbar(barheight = 5, barwidth = 0.2))
+  return(p)
+}
+
+# create and interactive scatterplot for eu countries of a year
+plotInteractiveSub <- function(val, type, year) {
+
+  eu_cells <- as.numeric(str_extract_all(spatial_header[grepl("EU",spatial_header)],"[0-9]+"))
+  val <- val[eu_cells,year,]
+
+  as.data.frame(val) ->valDF
+  valDF %>% pivot_wider(names_from = "Data2", values_from = "Value") -> valDF
+
+  p<- plotScatter(valDF, val, type)
+
+  p<- p+ggtitle(paste0("EU Countries ", year))
+  p <- plotly::ggplotly(p)
+  p
+}
+```
+
+## crop
+```{r,message=FALSE, warning=FALSE, out.width="100%"}
+plotCombined(val, "crop")
+```
+
+```{r, message=FALSE, warning=FALSE,   fig.align="center"}
+plotInteractiveSub(val, "crop", 2010)
+```
+
+## pasture
+```{r,message=FALSE, warning=FALSE,  out.width="100%"}
+plotCombined( val, "past")
+```
+
+```{r, message=FALSE, warning=FALSE,   fig.align="center"}
+plotInteractiveSub( val, "past", 2010)
+```
+ 
+## forestry
+```{r,message=FALSE, warning=FALSE,  out.width="100%"}
+plotCombined( val, "forestry")
+```
+
+```{r, message=FALSE, warning=FALSE,   fig.align="center"}
+plotInteractiveSub(val, "forestry", 2010)
+```
+ 
+## primforest
+```{r,message=FALSE, warning=FALSE,  out.width="100%"}
+plotCombined( val, "primforest")
+```
+
+```{r, message=FALSE, warning=FALSE,   fig.align="center"}	
+plotInteractiveSub(val, "primforest", 2010)
+```
+
+## secdforest
+```{r,message=FALSE, warning=FALSE,  out.width="100%"}
+plotCombined( val, "secdforest")
+```
+```{r, message=FALSE, warning=FALSE,   fig.align="center"} 
+plotInteractiveSub(val, "secdforest", 2010)
+```
+
+## urban
+```{r,message=FALSE, warning=FALSE,  out.width="100%"}
+plotCombined( val, "urban")
+```
+
+```{r, message=FALSE, warning=FALSE,   fig.align="center"}
+plotInteractiveSub(val, "urban", 2010)
+```
+ 
+## other
+```{r,message=FALSE, warning=FALSE,  out.width="100%"}
+plotCombined( val, "other")
+```
+
+```{r, message=FALSE, warning=FALSE,   fig.align="center"}
+plotInteractiveSub(val, "other", 2010)
+```

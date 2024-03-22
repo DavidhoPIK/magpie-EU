@@ -199,7 +199,7 @@ $title magpie
 * * Call: withCallingHandlers(expr, message = messageHandler, warning = warningHandler,     error = errorHandler)
 * 
 * 
-* Last modification (input data): Thu Mar 21 17:30:13 2024
+* Last modification (input data): Fri Mar 22 12:58:32 2024
 * 
 *###################### R SECTION END (VERSION INFO) ###########################
 
@@ -225,7 +225,7 @@ $offlisting
 
 $setglobal c_timesteps  coup2100
 $setglobal c_past  till_2010
-$setglobal c_title  default_eu_run
+$setglobal c_title  default_eu_run_high_livst_captial_low_depreciation
 
 scalars
 s_use_gdx   use of gdx files                                       / 0 /

@@ -47,4 +47,12 @@ cfg$gms$s21_multiplier_trade_marg <- 2
 
 
 cfg$title  <- "default_eu_run"
+# start_run(cfg,codeCheck=FALSE)
+
+# higher stickiness, lower depreciation 
+
+cfg$gms$s70_multiplicator_capital_need <- 3 
+cfg$gms$s70_depreciation_rate <- 0.02
+cfg$title  <- "default_eu_run_high_livst_captial_low_depreciation"
+
 start_run(cfg,codeCheck=FALSE)

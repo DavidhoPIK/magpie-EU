@@ -24,8 +24,8 @@ $setglobal c70_fac_req_regr  glo
 scalars
   s70_pyld_intercept     Intercept of linear relationship determining pasture intensification (1)        / 0.24 /
   s70_past_mngmnt_factor_fix  Year until the pasture management factor is fixed to 1    / 2005 /  
-  s70_depreciation_rate depreciation rate (share of costs)  / 0.05 /
-  s70_multiplicator_capital_need Multiplicator for capital need in livestock production  / 2 /
+  s70_depreciation_rate depreciation rate (share of costs)  / 0.02 /
+  s70_multiplicator_capital_need Multiplicator for capital need in livestock production  / 3 /
 ;
 
 table f70_feed_baskets(t_all,i,kap,kall,feed_scen70) Feed baskets in tDM per tDM livestock product (1)
