@@ -1,3 +1,6 @@
+# calibrate trademargins specific for each product
+# not converging
+
 library(mrvalidation)
 library(magpie4)
 library(mrcommons)

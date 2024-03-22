@@ -1,3 +1,6 @@
+# calibrate trademargins, single factor
+# is converging
+
 library(mrvalidation)
 library(magpie4)
 library(mrcommons)
